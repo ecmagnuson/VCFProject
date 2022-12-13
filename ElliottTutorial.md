@@ -73,21 +73,13 @@ and structural variants (Figure 2e,f).
 
 # Tutorial
 
-Obtaining a VCF file  
-We will be using [this](https://ftp.ncbi.nlm.nih.gov/pub/clinvar/vcf_GRCh37/clinvar_20221211.vcf.gz) VCF file from the [NIH repo here](https://ftp.ncbi.nlm.nih.gov/pub/clinvar/vcf_GRCh37/). It is a VCF that represents all human variants that are of clinical significance and has been mapped to GRCh37 assemblies. 
+<p> &emsp; We will be using the [clinvar_20221211.vcf.gz](https://ftp.ncbi.nlm.nih.gov/pub/clinvar/vcf_GRCh37/clinvar_20221211.vcf.gz) VCF file from the [NIH repo here](https://ftp.ncbi.nlm.nih.gov/pub/clinvar/vcf_GRCh37/). It is a VCF file that represents all human variants that are of clinical significance and has been mapped to GRCh37 assemblies. The clinvar_20221211.vcf.gz file is inside of the VCF folder in the same directory as this PDF, so there is no need to download it.
 
-This file is inside of the VCF folder attached to this PDF.
-
-Running the Unix command
-`wc -l clinvar_20221211.vcf` 
-
-shows that this file is 240,695 lines long, so it will be a mistake to open this in a text file or in Excel. Luckily, there are many freely available programs that can open and parse this data in an efficient manner.
-
-As is common in Computer Science, and perhaps an example of [not invented here syndrome](https://en.wikipedia.org/wiki/Not_invented_here), there  are about a million different tools that various people and organizations have created to deal with managing VCF files. 
+<p> &emsp; Running the `wc` Unix command on the file "`wc -l clinvar_20221211.vcf`" shows that this file is 240,695 lines long, so it will be a mistake to open this in a text file or in Excel. Luckily, there are many freely available programs that can open and parse this data in an efficient manner. As is common in Computer Science, and perhaps an example of [not invented here syndrome](https://en.wikipedia.org/wiki/Not_invented_here), there  are about a million different tools that various people and organizations have created to deal with managing VCF files. </p> 
 
 ## Viewing a VCF file with IGV
 
-<p> &emsp; So, you have a VCF file. The variants in this file can be viewed in many different biologically meaningful ways. It would be nice to see a visual representation of all of the genetic variants on each chromosome. Fortunately, the Broad Institute has created a program, Integrated Genomics Viewer (IGV) that can do exactly that. </p>
+<p> &emsp; So, we have a VCF file. The variants in this file can be viewed in many different biologically meaningful ways. It would be nice to see a visual representation of all of the genetic variants on each chromosome. Fortunately, the Broad Institute has created a program, Integrated Genomics Viewer (IGV) that can do exactly that. </p>
 
 Steps for IGV  
 
@@ -96,13 +88,13 @@ Steps for IGV
 3. Unzip the file installed onto your computer. Open a terminal and `cd` to the directory and execute `\.igv-launcher.bat` if you are on Windows or `./igv.sh` if you are on Linux or Mac OS.
 4. In the upper left use `File` -> `Load from File` -> and point to `clinvar_20221211.vcf.gz`. In order for this file to load correctly, IGV also needs the `clinvar_20221211.vcf.gz.tbi` file in the directory (it is there already).
 5. You'll still see an empty screen. This VCF file contains variants across all chromosomes, so it can be difficult to zoom into find one of the 240k variants. 
-6. In the search bar type in `chr17:7,579,399-7,579,513`. chromosome 17 p13.1 is the location of the tp53 gene. Mutations in this gene happens in many types of cancers, so we would expect many different variants. 
+6. In the search bar type in `chr17:7,579,399-7,579,513`. Chromosome 17 p13.1 is the location of the tp53 gene. Mutations in this gene happens in many types of cancers, so we would expect many different variants. 
 
-![IGV showing the variants of the clinvar_20221211.vcf file.The section with all of the blue bars is the variants. The depth has no meaning merely helps find variants](./Figures/IGVtp53.png){ width=90% }
+![IGV showing the variants of the clinvar_20221211.vcf file compared to the reference GRCh37. The section with all of the blue bars is the variants. The depth has no meaning merely helps find variants](./Figures/IGVtp53.png)
 
-<p> Figure 3 above shows the variants present in the clinvar_20221211.vcf file for the tp53 gene at position `chr17:7,579,399-7,579,513`. The blue lines are the "Variant Information Track" and each blue bar is a single variant. The depth has no meaning and to help see each variant. I have circled one of the variants I clicked, and the pop up menu to the left shows information about this variant, as well as the 8 fields of a VCF file. As you can see, at chromosome 17 position 7579408 the reference shows a single `C` base pair, but the sample has a large indel alternative value of `CAGAAGGAAGGGACAGAAGGA` and it is clinically significant and related to Li-Fraumeni syndrome, a rare genetic disorder that causes a nearly 100% chance of breast cancer in women. </p>
+<p> &emsp; Figure 3 above shows the variants present in the clinvar_20221211.vcf file for the tp53 gene at position `chr17:7,579,399-7,579,513`. The blue lines are the "Variant Information Track" and each blue bar is a single variant. The depth has no meaning and is present to help see each variant. I have circled one of the variants I clicked, and the pop up menu to the left shows information about this variant, as well as the 8 fields of a VCF file. As you can see, at chromosome 17 position 7579408 the reference shows a single `C` base pair, but the sample has a large indel alternative value of `CAGAAGGAAGGGACAGAAGGA`. Further information shows this is clinically significant and related to Li-Fraumeni syndrome, a rare genetic disorder that causes a nearly 100% chance of breast cancer in women. </p>
 
-<p> We can go further as well. Searching the ID `1074584` on [NIH's ClinVar](https://www.ncbi.nlm.nih.gov/clinvar/variation/1074584/?oq=1074584&m=NM_000546.6(TP53):c.278_279insTCCTTCTGTCCCTTCCTTCT%20(p.Ser94fs)#id_second) website, we can see further information, as well as the publication that found the indel [8].</p>
+<p> &emsp; We can go further as well. Searching the ID `1074584` on [NIH's ClinVar](https://www.ncbi.nlm.nih.gov/clinvar/variation/1074584/?oq=1074584&m=NM_000546.6(TP53):c.278_279insTCCTTCTGTCCCTTCCTTCT%20(p.Ser94fs)#id_second) website, we can see further information, as well as the publication that found the indel [8].</p>
 
  
 
