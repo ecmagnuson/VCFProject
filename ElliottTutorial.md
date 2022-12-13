@@ -97,14 +97,14 @@ Steps for IGV
 <p> &emsp; We can go further as well. Searching the ID `1074584` on [NIH's ClinVar](https://www.ncbi.nlm.nih.gov/clinvar/variation/1074584/?oq=1074584&m=NM_000546.6(TP53):c.278_279insTCCTTCTGTCCCTTCCTTCT%20(p.Ser94fs)#id_second) website, we can see further information, as well as the publication that found the indel [8].</p>
 
  
+## Filtering VCF files with VCF Tools
 
+<p> This VCF files we used, clinvar_20221211.vcf.gz, has over 240k variants present, spread out across every chromosome. Unless you know exactly where to look, it can be difficult to find the variant you are looking for. The authors at 1000s Genome Project in the 2011 paper highlighting the creation of the VCF file format created a program, VCF Tools, that has a lot of functionality - including filtering and merging files [2]. </p>
 
 
 It would also be nice to see what effects they have on them.
 
 ## Doing anything useful with a VCF file
-
-<p> &emsp; In their 2011 paper highlighting the creation of the VCF file format [2], the 1000s Genome Project created their on application that can be used to parse and annotate VCF files called “VCF Tools”.</p>
 
 How to read manually
 
@@ -126,6 +126,8 @@ List one that is good because it is documented and seems to be well tested
 # Conclusion
 
 <p> &emsp; The pipeline from sequencing DNA to determining the variation in the DNA sample compared to a reference involves a lot of steps and a massive amount of data. There exists a standardized way in which bioinformaticians use to process this data. One of the steps is the output, a VCF file containing the variation. Yet, this file still contains a large amount of data that can make it difficult to immediately be meaningful. There are programs and tools that we can use to help parse the information out of these VCF files into a more human readable format, so that we can extract biologically meaningful conclusions, results, etc.</p>
+
+<p> &emsp; For example, IGV allows us to interactively see the variants in your VCF files. From the example above, we were even able to determine what the possible effect would be from this variant, as well as the exact location on the genome. </p>
 
 
 # References
