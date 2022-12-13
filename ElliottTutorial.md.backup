@@ -66,23 +66,22 @@ The field definition lines contains the following fields:
 Each row below the headers represents one variant. As a reminder, VCF files exist to show the variants and this is represented by SNPs (Figure 2b), indels (Figure 2c,d),
 and structural variants (Figure 2e,f).
 
-![a) Anatomy of a VCF file. b-f) Further explanation of the BAM alignment representation of a genome and its VCF representation. g) Recommended VCF representation of alignment data that could be ambiguous [1].](./Figures/VCFAnatomy.png){ width=80% }
+![a) Anatomy of a VCF file. b-f) Further explanation of the BAM alignment representation of a genome and its VCF representation. g) Recommended VCF representation of alignment data that could be ambiguous [1].](./Figures/VCFAnatomy.png){ width=90% }
 
 <p> &emsp; The variant ID is a unique value that is useful when looking to search for information about the variant. For example, in our VCF example above, the one row that exists has an ID of `rs12`. This SNP ID is assigned by the NCBI's database of SNPs, called dbSNP or the European Variation Archive (EVA). The European Bioinformatics Institute (EMBL-EBI) has a great [resource](https://www.ebi.ac.uk/training/online/courses/human-genetic-variation-introduction/variant-identification-and-analysis/variant-identifiers/) listing all of the varying ID values and where they come from [7]. </p>
 <p> &emsp; You may have noticed that there is some meta data information in Figure 2a that I did not introduce. The specifics of what each line means can become quite convoluted. The NIH has an [excellent resource](https://www.ncbi.nlm.nih.gov/snp/docs/products/vcf/redesign/) on INFO tags and their meaning. Likewise, the 1000s Genome Project created a [poster](https://vcftools.sourceforge.net/VCF-poster.pdf) with a VCF example as well. </p>
 
 # Tutorial
 
-<p> &emsp; 
 Obtaining a VCF file  
 We will be using [this](https://ftp.ncbi.nlm.nih.gov/pub/clinvar/vcf_GRCh37/clinvar_20221211.vcf.gz) VCF file from the [NIH repo here](https://ftp.ncbi.nlm.nih.gov/pub/clinvar/vcf_GRCh37/). It is a VCF that represents all human variants that are of clinical significance and has been mapped to GRCh37 assemblies. 
 
 This file is inside of the VCF folder attached to this PDF.
 
 Running the Unix command
-`wc -l clinvar_20221211.vcf.gz` 
+`wc -l clinvar_20221211.vcf` 
 
-shows that this file is 240,695 lines long, so it will be a mistake to open this in a text file or in Excel. Luckily, there are many freely available programs that can open and parse this data in an efficient manner.</p>
+shows that this file is 240,695 lines long, so it will be a mistake to open this in a text file or in Excel. Luckily, there are many freely available programs that can open and parse this data in an efficient manner.
 
 As is common in Computer Science, and perhaps an example of [not invented here syndrome](https://en.wikipedia.org/wiki/Not_invented_here), there  are about a million different tools that various people and organizations have created to deal with managing VCF files. 
 
@@ -95,6 +94,17 @@ Steps for IGV
 1. IGV can be installed [here](https://software.broadinstitute.org/software/igv/download). There is also a [web app](https://igv.org/app), but it is not as functional as the desktop app.
 2. If you are familiar with Java and know you have Java Runtime   Environment 11 (JRE) install on your computer, you can install the app that says "Separate Java 11 required", otherwise install the "Java included" version of your OS.
 3. Unzip the file installed onto your computer. Open a terminal and `cd` to the directory and execute `\.igv-launcher.bat` if you are on Windows or `./igv.sh` if you are on Linux or Mac OS.
+4. In the upper left use `File` -> `Load from File` -> and point to `clinvar_20221211.vcf.gz`. In order for this file to load correctly, IGV also needs the `clinvar_20221211.vcf.gz.tbi` file in the directory (it is there already).
+5. You'll still see an empty screen. This VCF file contains variants across all chromosomes, so it can be difficult to zoom into find one of the 240k variants. 
+6. In the search bar type in `chr17:7,579,399-7,579,513`. chromosome 17 p13.1 is the location of the tp53 gene. Mutations in this gene happens in many types of cancers, so we would expect many different variants. 
+
+![IGV showing the variants of the clinvar_20221211.vcf file.The section with all of the blue bars is the variants. The depth has no meaning merely helps find variants](./Figures/IGVtp53.png){ width=90% }
+
+<p> Figure 3 above shows the variants present in the clinvar_20221211.vcf file for the tp53 gene at position `chr17:7,579,399-7,579,513`. The blue lines are the "Variant Information Track" and each blue bar is a single variant. The depth has no meaning and to help see each variant. I have circled one of the variants I clicked, and the pop up menu to the left shows information about this variant, as well as the 8 fields of a VCF file. As you can see, at chromosome 17 position 7579408 the reference shows a single `C` base pair, but the sample has a large indel alternative value of `CAGAAGGAAGGGACAGAAGGA` and it is clinically significant and related to Li-Fraumeni syndrome, a rare genetic disorder that causes a nearly 100% chance of breast cancer in women. </p>
+
+<p> We can go further as well. Searching the ID `1074584` on [NIH's ClinVar](https://www.ncbi.nlm.nih.gov/clinvar/variation/1074584/?oq=1074584&m=NM_000546.6(TP53):c.278_279insTCCTTCTGTCCCTTCCTTCT%20(p.Ser94fs)#id_second) website, we can see further information, as well as the publication that found the indel [8].</p>
+
+ 
 
 
 
@@ -138,3 +148,4 @@ List one that is good because it is documented and seems to be well tested
 5. https://github.com/samtools/hts-specs
 6. https://samtools.github.io/hts-specs/VCFv4.3.pdf
 7. https://www.ebi.ac.uk/training/online/courses/human-genetic-variation-introduction/variant-identification-and-analysis/variant-identifiers/
+8. Ruijs MW, Verhoef S, Rookus MA, Pruntel R, van der Hout AH, Hogervorst FB, Kluijt I, Sijmons RH, Aalfs CM, Wagner A, Ausems MG, Hoogerbrugge N, van Asperen CJ, Gomez Garcia EB, Meijers-Heijboer H, Ten Kate LP, Menko FH, van 't Veer LJ. TP53 germline mutation testing in 180 families suspected of Li-Fraumeni syndrome: mutation detection rate and relative frequency of cancers in different familial phenotypes. J Med Genet. 2010 Jun;47(6):421-8. doi: 10.1136/jmg.2009.073429. PMID: 20522432.
