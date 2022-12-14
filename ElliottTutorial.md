@@ -99,12 +99,12 @@ Steps for IGV
 <p> &emsp; As we can see, IGV is an extremely powerful program. It is one of the many classic free/open source programs that accomplishes it's goal with wonderful efficiency but just also has a really bland UI. That is opposed to paid and closed source software that looks beautiful and sucks. Or God forbid a paid closed source software that also looks terrible.. shudders. </p>
 
  
-## Filtering VCF files with BCF Tools
+## Filtering VCF files with VCF Tools
 
-<p> &emsp; This VCF files we used, clinvar_20221211.vcf.gz, has over 240k variants present, spread out across every chromosome. Unless you know exactly where to look, it can be difficult to find the variant you are looking for in a specific chromosome. This can be achieved with [BCF Tools](https://samtools.github.io/bcftools/bcftools.html) created by samtools, an incredibly powerful command line program built for manipulating VCF files [9]. </p>
+<p> &emsp; This VCF files we used, clinvar_20221211.vcf.gz, has over 240k variants present, spread out across every chromosome. Unless you know exactly where to look, it can be difficult to find the variant you are looking for in a specific chromosome. This can be achieved with [BCF Tools](https://vcftools.sourceforge.net/) created by researchers affiliated with the 1000s genome project, an incredibly powerful command line program built for manipulating VCF files [2]. </p>
 
 ### Installing Windows Subsystem for Linux
-<p> &emsp; Unfortunately, the really good programs that let you parse and manipulate VCF files are for Unix like operating systems. This includes BCF Tools. As such, if you are on Windows you will need to install the Windows Subsystem for Linux (WSL).  
+<p> &emsp; Unfortunately, the really good programs that let you parse and manipulate VCF files are for Unix like operating systems. This includes VCF Tools. As such, if you are on Windows you will need to install the Windows Subsystem for Linux (WSL).  
   
  Full documentation is [here](https://learn.microsoft.com/en-us/windows/wsl/install), but the steps are as follows:
 
@@ -115,14 +115,20 @@ Steps for IGV
 5. Open the start menu, search Ubuntu, and running it as an App will open up and instance of Ubuntu.
 6. Follow the prompt to create a username and password.
 7. Run `sudo apt update` to update your system.
-8. BCF Tools will require a C compiler, so run `sudo apt install gcc make`
+8. VCF Tools will require a C compiler, make, and a `gz` zipper, so run `sudo apt install gcc make gzip`.
 
-### Installing BCF Tools
+### Installing VCF Tools
 
-Now we can install BCF Tools from [these](https://www.htslib.org/download/) steps.
+1. We can install VCF Tools from [here](https://sourceforge.net/projects/vcftools/reviews/). Click the download button and it will install `vcftools_0.1.13.gz`.
+2. You can unzip this file with `gzip -d vcftools_0.1.13.gz`.
+3. Enter `cd vcftools_0.1.13`.
+4. Enter `make` and it will compile VCF Tools to a file in the current directory called `bin`.
+5. After compiling, enter `cd bin`
+6. Enter `pwd` and copy the output, this is the current directory you are in
+7. To make the VCF Tools binary file run as a command line program from any directory, you then need to enter `export PATH=$PATH:paste/path/here/`
+8. my result for pwd is `/home/elliott/.sourcecode/vcftools_0.1.13/bin` so I would enter `export PATH=$PATH:/home/elliott/.sourcecode/vcftools_0.1.13/bin`.
 
-1. [This link](https://github.com/samtools/bcftools/releases/download/1.16/bcftools-1.16.tar.bz2) will install `bcftools-1.16.tar.bz2` 
-2. 
+This was a lot of work, but after closing and reopening your Ubuntu instance, now the VCF Tools binary can be run from any directory you want!
 
 
 It would also be nice to see what effects they have on them.
