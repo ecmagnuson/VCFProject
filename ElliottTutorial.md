@@ -131,7 +131,18 @@ Steps for IGV
 This was a lot of work, but after closing and reopening your Ubuntu instance, now the VCF Tools binary can be run from any directory you want!
 
 
-It would also be nice to see what effects they have on them.
+### Using VCF Tools
+
+1. Open up a terminal in the directory where you have `clinvar_20221211.vcf.gz`.
+
+Side note: with Windows, here's where things get even more weird. You are running two different operating systems at the same time, and they each have their own file system. Microsoft has documentation on how to access files between them [here](https://learn.microsoft.com/en-us/windows/wsl/filesystems), but it can be boiled down to use `explorer.exe .` in the terminal to open the currently directory of your Linux system. You can paste `clinvar_20221211.vcf.gz` in this directory and it should be accessible after that.
+
+2. 
+
+
+
+
+
 
 ## Doing anything useful with a VCF file
 
