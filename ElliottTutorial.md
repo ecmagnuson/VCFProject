@@ -1,7 +1,7 @@
 ---
 title: Viewing and manipulating Variant Call Format files
 author: Elliott Magnuson
-date: December 12th, 2022
+date: December 14th, 2022
 geometry: "left=2cm,right=2cm,top=2cm,bottom=3cm"
 output:
   pdf_document:
@@ -22,11 +22,11 @@ output:
 
 <p> &emsp; The Variant Call Format (VCF) file type was created by the 1000s Genomes Project so they could store genetic variation data collected in an organized and meaningful way [3]. Using this format, the only necessary thing that needs to be stored is the reference genome and the variations themselves. The VCF file extension is “.vcf”, but the file itself is just text, so any text editor can open and display the data inside.</p>
 
-<p> &emsp; There are a number of steps that are required to go through to end up with a meaningful VCF file. If you send in your samples for sequencing, many companies will complete these steps for you through what is called a pipeline, and they will send you your results of SNPs and indels in VCF form. For example, a sample of DNA is sequenced, which produces a raw FASTA DNA sequence. The sequence is aligned with a reference creating a Sequence Alignment/Map (SAM) file. Processing the SAM file involves IDing where the alignment is different between the reference and the target sequence, and the VCF is built. The term for this is “variant calling” - whereby we are able to ultimately ID the variants from the input of the sequence data. This process has become a standardized way for bioinformaticians to tidy and handle massive amounts of genomic data into parasable files that contain only the variation data. The Global Alliance for Genomics & Health (GA4H) has laid out what they call the Large Scale Genomics work stream, the process mentioned above acting as a pipeline of genomic formatting [4,5].</p>
+<p> &emsp; There are a number of steps that are required to go through to end up with a meaningful VCF file. If you send in your samples for sequencing, many companies will complete these steps for you through what is called a pipeline, and they will send you your results of SNPs and indels in VCF form. For example, a sample of DNA is sequenced, which produces a raw FASTA DNA sequence. The sequence is aligned with a reference creating a Sequence Alignment/Map (SAM) file. Processing the SAM file involves IDing where the alignment is different between the reference and the target sequence, and the VCF is built. The term for this is “variant calling” - whereby we are able to ultimately ID the variants from the input of the sequence data. This process has become a standardized way for bioinformaticians to tidy and handle massive amounts of genomic data into parasable files that contain only the variation data. The Global Alliance for Genomics & Health (GA4H) has laid out what they call the Large Scale Genomics work stream, the process mentioned above acting as a pipeline of genomic formatting.</p>
 
 ## Anatomy of a VCF file
 
-<p> &emsp; While the text in a VCF file in itself is not immediately very helpful to a human reader, I will go over the basics of the format itself before we learn how to use tools that have been created to parse and manipulate them. The anatomy of a VCF file is extremely well documented, and the full specification of the newest standard (VCFv4.3) is freely available online [6]. </p>
+<p> &emsp; While the text in a VCF file in itself is not immediately very helpful to a human reader, I will go over the basics of the format itself before we learn how to use tools that have been created to parse and manipulate them. The anatomy of a VCF file is extremely well documented, and the full specification of the newest standard (VCFv4.3) is freely available [online](https://samtools.github.io/hts-specs/VCFv4.3.pdf). </p>
 
 <p> &emsp; Figure 2 below shows the standardized anatomy of a VCF file. It can be a lot to parse if you have never seen one before, so I will go over the most important parts below.
 
@@ -47,7 +47,7 @@ VCF example (From Figure 2a) with only one variant row:
 #CHROM	POS	ID	  REF	ALT	QUAL  FILTER	INFO	
  1        5  rs12 A     G    67   PASS      . 
 ```
-This small VCF example, taken from Figure 2a, show the first four rows of the VCFfile, the 8 mandatory fields, and one variant. While `fileformat` is mandatory as the first header row, the other rows are not. Yet, it is clear that presenting data such as the reference genome is useful.
+This small VCF example, taken from Figure 2a, shows the first four rows of the VCFfile, the 8 mandatory fields, and one variant. While `fileformat` is mandatory as the first header row, the other rows are not. Yet, it is clear that presenting data such as the reference genome is useful.
 This metadata provides a standardized way to share information in the VCF file about various things like version of reference sequence, software that has already been used on the file, and is featured to fit the dataset itself. In this VCF you can see the reference human_NCBI36.fasta was used.
 
 The field definition lines contains the following fields:  
@@ -68,7 +68,7 @@ and structural variants (Figure 2e,f).
 
 ![a) Anatomy of a VCF file. b-f) Further explanation of the BAM alignment representation of a genome and its VCF representation. g) Recommended VCF representation of alignment data that could be ambiguous [1].](./Figures/VCFAnatomy.png){ width=90% }
 
-<p> &emsp; The variant ID is a unique value that is useful when looking to search for information about the variant. For example, in our VCF example above, the one row that exists has an ID of `rs12`. This SNP ID is assigned by the NCBI's database of SNPs, called dbSNP or the European Variation Archive (EVA). The European Bioinformatics Institute (EMBL-EBI) has a great [resource](https://www.ebi.ac.uk/training/online/courses/human-genetic-variation-introduction/variant-identification-and-analysis/variant-identifiers/) listing all of the varying ID values and where they come from [7]. </p>
+<p> &emsp; The variant ID is a unique value that is useful when looking to search for information about the variant. For example, in our VCF example above, the one row that exists has an ID of `rs12`. This SNP ID is assigned by the NCBI's database of SNPs, called dbSNP or the European Variation Archive (EVA). The European Bioinformatics Institute (EMBL-EBI) has a great [resource](https://www.ebi.ac.uk/training/online/courses/human-genetic-variation-introduction/variant-identification-and-analysis/variant-identifiers/) [listing](https://www.ebi.ac.uk/training/online/courses/human-genetic-variation-introduction/variant-identification-and-analysis/variant-identifiers/) all of the varying ID values and where they come from. </p>
 <p> &emsp; You may have noticed that there is some meta data information in Figure 2a that I did not introduce. The specifics of what each line means can become quite convoluted. The NIH has an [excellent resource](https://www.ncbi.nlm.nih.gov/snp/docs/products/vcf/redesign/) on INFO tags and their meaning. Likewise, the 1000s Genome Project created a [poster](https://vcftools.sourceforge.net/VCF-poster.pdf) with a VCF example as well. </p>
 
 # Tutorial
@@ -87,21 +87,21 @@ Steps for IGV
 2. If you are familiar with Java and know you have Java Runtime   Environment 11 (JRE) install on your computer, you can install the app that says "Separate Java 11 required", otherwise install the "Java included" version of your OS.
 3. Unzip the file installed onto your computer. Open a terminal and `cd` to the directory and execute `\.igv-launcher.bat` if you are on Windows or `./igv.sh` if you are on Linux or Mac OS.
 4. In the upper left use `File` -> `Load from File` -> and point to `clinvar_20221211.vcf.gz`. In order for this file to load correctly, IGV also needs the `clinvar_20221211.vcf.gz.tbi` file in the directory (it is there already).
-5. You'll still see an empty screen. This VCF file contains variants across all chromosomes, so it can be difficult to zoom into find one of the 240k variants. 
+5. You'll still see an empty screen. This VCF file contains variants across all chromosomes, so it can be difficult to zoom into find one of the variants. 
 6. In the search bar type in `chr17:7,579,399-7,579,513`. Chromosome 17 p13.1 is the location of the tp53 gene. Mutations in this gene happens in many types of cancers, so we would expect many different variants to be of clinical significance. 
 
 ![IGV showing the variants of the clinvar_20221211.vcf file compared to the reference GRCh37. The section with all of the blue bars is the variants. The depth has no meaning merely helps find variants](./Figures/IGVtp53.png)
 
-<p> &emsp; Figure 3 above shows the variants present in the clinvar_20221211.vcf file for the tp53 gene at position `chr17:7,579,399-7,579,513`. The blue lines are the "Variant Information Track" and each blue bar is a single variant. The depth has no meaning and is present to help see each variant. I have circled one of the variants I clicked, and the pop up menu to the left shows information about this variant, as well as the 8 fields of a VCF file. As you can see, at chromosome 17 position 7579408 the reference shows a single `C` base pair, but the sample has a large indel alternative value of `CAGAAGGAAGGGACAGAAGGA`. Further information shows this is clinically significant and related to Li-Fraumeni syndrome, a rare genetic disorder that causes a nearly 100% chance of breast cancer in women. </p>
+<p> &emsp; Figure 3 above shows the variants present in the clinvar_20221211.vcf file for the tp53 gene at position `chr17:7,579,399-7,579,513`. The blue lines are the "Variant Information Track" and each blue bar is a single variant. The depth has no meaning and is present to help see each variant. I have circled one of the variants I clicked, and the pop up menu to the left shows information about this variant, as well as the 8 fields of a VCF file. As you can see, at chromosome 17 position 7579408 the reference shows a single `C` base pair, but the sample has a large indel alternative value of `CAGAAGGAAGGGACAGAAGGA`. Further information shows this is clinically significant and related to Li-Fraumeni syndrome, a rare genetic disorder that can increase an individuals chance of cancer. </p>
 
-<p> &emsp; We can go further as well. Searching the ID `1074584` on [NIH's ClinVar](https://www.ncbi.nlm.nih.gov/clinvar/variation/1074584/?oq=1074584&m=NM_000546.6(TP53):c.278_279insTCCTTCTGTCCCTTCCTTCT%20(p.Ser94fs)#id_second) website, we can see further information, as well as the publication that found the indel [8].</p>
+<p> &emsp; We can go further as well. Searching the ID `1074584` on [NIH's ClinVar](https://www.ncbi.nlm.nih.gov/clinvar/variation/1074584/?oq=1074584&m=NM_000546.6(TP53):c.278_279insTCCTTCTGTCCCTTCCTTCT%20(p.Ser94fs)#id_second) website, we can see further information, as well as the publication that found the indel [4].</p>
 
 <p> &emsp; As we can see, IGV is an extremely powerful program. It is one of the many classic free/open source programs that accomplishes it's goal with wonderful efficiency but just also has a really bland UI. That is opposed to paid and closed source software that looks beautiful and sucks. Or God forbid a paid closed source software that also looks terrible.. shudders. </p>
 
  
 ## Filtering VCF files with VCF Tools
 
-<p> &emsp; This VCF files we used, clinvar_20221211.vcf.gz, has over 240k variants present, spread out across every chromosome. Unless you know exactly where to look, it can be difficult to find the variant you are looking for in a specific chromosome. This can be achieved with [BCF Tools](https://vcftools.sourceforge.net/) created by researchers affiliated with the 1000s genome project, an incredibly powerful command line program built for manipulating VCF files [2]. </p>
+<p> &emsp; This VCF files we used, clinvar_20221211.vcf.gz, has hundreds of thousands of variants present, spread out across every chromosome. Unless you know exactly where to look, it can be difficult to find the variant you are looking for in a specific chromosome. This can be achieved with [BCF Tools](https://vcftools.sourceforge.net/) created by researchers affiliated with the 1000s genome project, an incredibly powerful command line program built for manipulating VCF files [2]. </p>
 
 ### Installing Windows Subsystem for Linux
 <p> &emsp; Unfortunately, the really good programs that let you parse and manipulate VCF files are for Unix like operating systems. This includes VCF Tools. As such, if you are on Windows you will need to install the Windows Subsystem for Linux (WSL).  
@@ -137,32 +137,28 @@ This was a lot of work, but after closing and reopening your Ubuntu instance, no
 
 Side note: with Windows, here's where things get even more weird. You are running two different operating systems at the same time, and they each have their own file system. Microsoft has documentation on how to access files between them [here](https://learn.microsoft.com/en-us/windows/wsl/filesystems), but it can be boiled down to use `explorer.exe .` in the terminal to open the currently directory of your Linux system. You can paste `clinvar_20221211.vcf.gz` in this directory and it should be accessible after that.
 
-2. 
+VCF Tools is [well documented](https://vcftools.sourceforge.net/documentation.html#newvcf), but I will go over a few commands that may be useful below. 
 
+2. VCF Tools requires your `.vcf` file to unzipped, so you must first run  
+ `gzip clinvar_20221211.vcf.gz` and this will create `gzip -d clinvar_20221211.vcf` in the same directory.
+3. `vcftools --vcf clinvar_20221211.vcf` will give you the amount of variants in the file, 1572295.
+4. You can specify what chromosome to look at with  
 
+```
+vcftools --vcf clinvar_20221211.vcf --chr 17 
+--from-bp 0 --to-bp 2000000 --recode -c | gzip -c > Chromosome17Subset.vcf.gz
+``` 
+and this command with parse out only the base pairs between 0 and 20 million on chromosome 17 and place it into a file called `Chromosome17Subset.vcf.gz`.
 
+Further documentation can be found [here](https://vcftools.sourceforge.net/examples.html), [here](https://vcftools.sourceforge.net/perl_module.html), and [here](https://vcftools.sourceforge.net/man_latest.html).
 
-
-
-## Doing anything useful with a VCF file
-
-How to read manually
-
-How to parse manually
-
-People have written programs that will do this for you
-Command line programs
-There are many of them
-List one that is good because it is documented and seems to be well tested
 
 # Other available programs
 
-<p> &emsp; This tutorial has examined two programs, IGV and BCFTools to visualize and parse data respectively. However, there are a large number of other programs that have been created to do this as well. I have listed them here as a resource should you wish to view them. </p>
+<p> &emsp; This tutorial has examined two programs, IGV and VCFTools to visualize and parse data respectively. However, there are a large number of other programs that have been created to do this as well. I have listed them here as a resource should you wish to view them. </p>
 
 * [sgkit](https://pystatgen.github.io/sgkit/latest/vcf.html) provides a Python API, with parsing performed by [cyvcf2](https://github.com/brentp/cyvcf2)
-* https://alimanfoo.github.io/2017/06/14/read-vcf.html
-* The authors at 1000s Genome Project in the 2011 paper highlighting the creation of the VCF file format created a program, VCF Tools, that has a lot of functionality - including filtering and merging files [2]. 
-
+* The authors at samtools created another very powerful command line program called [BCF Tools](https://samtools.github.io/bcftools/bcftools.html)[5].
 
 # Conclusion
 
@@ -171,19 +167,10 @@ List one that is good because it is documented and seems to be well tested
 <p> &emsp; For example, IGV allows us to interactively see the variants in your VCF files. From the example above, we were even able to determine what the possible effect would be from this variant, as well as the exact location on the genome. </p>
 
 
-
-
 # References
 
-1. 1000 Genomes Project Consortium, Auton A, Brooks LD, Durbin RM, Garrison EP, Kang HM, Korbel JO, Marchini JL, McCarthy S, McVean GA, Abecasis GR. A global reference for human genetic variation. Nature. 2015 Oct 1;526(7571):68-74. doi: 10.1038/nature15393. PMID: 26432245; PMCID: PMC4750478.
-
-2. Oleksyk TK, Brukhin V, O'Brien SJ. The Genome Russia project: closing the largest remaining omission on the world Genome map. Gigascience. 2015 Nov 13;4:53. doi: 10.1186/s13742-015-0095-0. PMID: 26568821; PMCID: PMC4644275.
-
-3. Danecek P, Auton A, Abecasis G, Albers CA, Banks E, DePristo MA, Handsaker RE, Lunter G, Marth GT, Sherry ST, McVean G, Durbin R; 1000 Genomes Project Analysis Group. The variant call format and VCFtools. Bioinformatics. 2011 Aug 1;27(15):2156-8. doi: 10.1093/bioinformatics/btr330. Epub 2011 Jun 7. PMID: 21653522; PMCID: PMC3137218.
-
-4. https://samtools.github.io/hts-specs/
-5. https://github.com/samtools/hts-specs
-6. https://samtools.github.io/hts-specs/VCFv4.3.pdf
-7. https://www.ebi.ac.uk/training/online/courses/human-genetic-variation-introduction/variant-identification-and-analysis/variant-identifiers/
-8. Ruijs MW, Verhoef S, Rookus MA, Pruntel R, van der Hout AH, Hogervorst FB, Kluijt I, Sijmons RH, Aalfs CM, Wagner A, Ausems MG, Hoogerbrugge N, van Asperen CJ, Gomez Garcia EB, Meijers-Heijboer H, Ten Kate LP, Menko FH, van 't Veer LJ. TP53 germline mutation testing in 180 families suspected of Li-Fraumeni syndrome: mutation detection rate and relative frequency of cancers in different familial phenotypes. J Med Genet. 2010 Jun;47(6):421-8. doi: 10.1136/jmg.2009.073429. PMID: 20522432.
-9. Petr Danecek, James K Bonfield, Jennifer Liddle, John Marshall, Valeriu Ohan, Martin O Pollard, Andrew Whitwham, Thomas Keane, Shane A McCarthy, Robert M Davies, Heng Li, Twelve years of SAMtools and BCFtools, GigaScience, Volume 10, Issue 2, February 2021, giab008, https://doi.org/10.1093/gigascience/giab008
+1. 1000 Genomes Project Consortium, Auton A, Brooks LD, Durbin RM, Garrison EP, Kang HM, Korbel JO, Marchini JL, McCarthy S, McVean GA, Abecasis GR. A global reference for human genetic variation. Nature. 2015 Oct 1;526(7571):68-74. doi: 10.1038/nature15393. PMID: 26432245; PMCID: PMC4750478.  
+2. Oleksyk TK, Brukhin V, O'Brien SJ. The Genome Russia project: closing the largest remaining omission on the world Genome map. Gigascience. 2015 Nov 13;4:53. doi: 10.1186/s13742-015-0095-0. PMID: 26568821; PMCID: PMC4644275.  
+3. Danecek P, Auton A, Abecasis G, Albers CA, Banks E, DePristo MA, Handsaker RE, Lunter G, Marth GT, Sherry ST, McVean G, Durbin R; 1000 Genomes Project Analysis Group. The variant call format and VCFtools. Bioinformatics. 2011 Aug 1;27(15):2156-8. doi: 10.1093/bioinformatics/btr330. Epub 2011 Jun 7. PMID: 21653522; PMCID: PMC3137218.  
+4. Ruijs MW, Verhoef S, Rookus MA, Pruntel R, van der Hout AH, Hogervorst FB, Kluijt I, Sijmons RH, Aalfs CM, Wagner A, Ausems MG, Hoogerbrugge N, van Asperen CJ, Gomez Garcia EB, Meijers-Heijboer H, Ten Kate LP, Menko FH, van 't Veer LJ. TP53 germline mutation testing in 180 families suspected of Li-Fraumeni syndrome: mutation detection rate and relative frequency of cancers in different familial phenotypes. J Med Genet. 2010 Jun;47(6):421-8. doi: 10.1136/jmg.2009.073429. PMID: 20522432.  
+5. Petr Danecek, James K Bonfield, Jennifer Liddle, John Marshall, Valeriu Ohan, Martin O Pollard, Andrew Whitwham, Thomas Keane, Shane A McCarthy, Robert M Davies, Heng Li, Twelve years of SAMtools and BCFtools, GigaScience, Volume 10, Issue 2, February 2021, giab008, https://doi.org/10.1093/gigascience/giab008
