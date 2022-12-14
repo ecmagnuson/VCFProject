@@ -1,5 +1,5 @@
 ---
-title: Viewing and parsing Variant Call Format files
+title: Viewing and manipulating Variant Call Format files
 author: Elliott Magnuson
 date: December 12th, 2022
 geometry: "left=2cm,right=2cm,top=2cm,bottom=3cm"
@@ -73,9 +73,9 @@ and structural variants (Figure 2e,f).
 
 # Tutorial
 
-<p> &emsp; We will be using the [clinvar_20221211.vcf.gz](https://ftp.ncbi.nlm.nih.gov/pub/clinvar/vcf_GRCh37/clinvar_20221211.vcf.gz) VCF file from the [NIH repo here](https://ftp.ncbi.nlm.nih.gov/pub/clinvar/vcf_GRCh37/). It is a VCF file that represents all human variants that are of clinical significance and has been mapped to GRCh37 assemblies. The clinvar_20221211.vcf.gz file is inside of the VCF folder in the same directory as this PDF, so there is no need to download it.
+<p> &emsp; We will be using the [clinvar_20221211.vcf.gz](https://ftp.ncbi.nlm.nih.gov/pub/clinvar/vcf_GRCh37/clinvar_20221211.vcf.gz) VCF file from the [NIH repo here](https://ftp.ncbi.nlm.nih.gov/pub/clinvar/vcf_GRCh37/). It is a VCF file that represents all human variants that are of clinical significance and has been mapped to GRCh37 assemblies. The clinvar_20221211.vcf.gz file is inside of the VCF folder in the same directory as this PDF, so there is no need to download it. While the `.gz` extension is a zipped version of the file, IGV will still be able to view the file, so there is no need to unzip the file either.
 
-<p> &emsp; Running the `wc` Unix command on the file "`wc -l clinvar_20221211.vcf`" shows that this file is 240,695 lines long, so it will be a mistake to open this in a text file or in Excel. Luckily, there are many freely available programs that can open and parse this data in an efficient manner. As is common in Computer Science, and perhaps an example of [not invented here syndrome](https://en.wikipedia.org/wiki/Not_invented_here), there  are about a million different tools that various people and organizations have created to deal with managing VCF files. </p> 
+<p> &emsp; Running the Unix command "`wc -l clinvar_20221211.vcf`" on the file shows that this it is 240,695 lines long, so it will be a mistake to open this in a text file or in Excel. Luckily, there are many freely available programs that can open and parse this data in an efficient manner. As is common in Computer Science, and perhaps an example of [not invented here syndrome](https://en.wikipedia.org/wiki/Not_invented_here), there  are about a million different tools that various people and organizations have created to deal with managing VCF files. </p> 
 
 ## Viewing a VCF file with IGV
 
@@ -88,7 +88,7 @@ Steps for IGV
 3. Unzip the file installed onto your computer. Open a terminal and `cd` to the directory and execute `\.igv-launcher.bat` if you are on Windows or `./igv.sh` if you are on Linux or Mac OS.
 4. In the upper left use `File` -> `Load from File` -> and point to `clinvar_20221211.vcf.gz`. In order for this file to load correctly, IGV also needs the `clinvar_20221211.vcf.gz.tbi` file in the directory (it is there already).
 5. You'll still see an empty screen. This VCF file contains variants across all chromosomes, so it can be difficult to zoom into find one of the 240k variants. 
-6. In the search bar type in `chr17:7,579,399-7,579,513`. Chromosome 17 p13.1 is the location of the tp53 gene. Mutations in this gene happens in many types of cancers, so we would expect many different variants. 
+6. In the search bar type in `chr17:7,579,399-7,579,513`. Chromosome 17 p13.1 is the location of the tp53 gene. Mutations in this gene happens in many types of cancers, so we would expect many different variants to be of clinical significance. 
 
 ![IGV showing the variants of the clinvar_20221211.vcf file compared to the reference GRCh37. The section with all of the blue bars is the variants. The depth has no meaning merely helps find variants](./Figures/IGVtp53.png)
 
@@ -96,17 +96,38 @@ Steps for IGV
 
 <p> &emsp; We can go further as well. Searching the ID `1074584` on [NIH's ClinVar](https://www.ncbi.nlm.nih.gov/clinvar/variation/1074584/?oq=1074584&m=NM_000546.6(TP53):c.278_279insTCCTTCTGTCCCTTCCTTCT%20(p.Ser94fs)#id_second) website, we can see further information, as well as the publication that found the indel [8].</p>
 
- 
-## Filtering VCF files with VCF Tools
+<p> &emsp; As we can see, IGV is an extremely powerful program. It is one of the many classic free/open source programs that accomplishes it's goal with wonderful efficiency but just also has a really bland UI. That is opposed to paid and closed source software that looks beautiful and sucks. Or God forbid a paid closed source software that also looks terrible.. shudders. </p>
 
-<p> This VCF files we used, clinvar_20221211.vcf.gz, has over 240k variants present, spread out across every chromosome. Unless you know exactly where to look, it can be difficult to find the variant you are looking for. The authors at 1000s Genome Project in the 2011 paper highlighting the creation of the VCF file format created a program, VCF Tools, that has a lot of functionality - including filtering and merging files [2]. </p>
+ 
+## Filtering VCF files with BCF Tools
+
+<p> &emsp; This VCF files we used, clinvar_20221211.vcf.gz, has over 240k variants present, spread out across every chromosome. Unless you know exactly where to look, it can be difficult to find the variant you are looking for in a specific chromosome. This can be achieved with [BCF Tools](https://samtools.github.io/bcftools/bcftools.html) created by samtools, an incredibly powerful command line program built for manipulating VCF files [9]. </p>
+
+### Installing Windows Subsystem for Linux
+<p> &emsp; Unfortunately, the really good programs that let you parse and manipulate VCF files are for Unix like operating systems. This includes BCF Tools. As such, if you are on Windows you will need to install the Windows Subsystem for Linux (WSL).  
+  
+ Full documentation is [here], but the steps are as follows:
+
+1. Open PowerShell in administrator mode.
+2. Enter `wsl --install` into PowerShell.
+3. Reboot your computer.
+4. Ubuntu, a distribution of Linux is installed on your computer now. 
+5. Open the start menu, search Ubuntu, and running it as an App will open up and instance of Ubuntu.
+6. Follow the prompt to create a username and password.
+7. Run `sudo apt update` to update your system.
+8. BCF Tools will require a C compiler, so run `sudo apt install gcc make`
+
+### Installing BCF Tools
+
+Now we can install BCF Tools from [these](https://www.htslib.org/download/) steps.
+
+1. [This link](https://github.com/samtools/bcftools/releases/download/1.16/bcftools-1.16.tar.bz2) will install `bcftools-1.16.tar.bz2` 
+2. 
 
 
 It would also be nice to see what effects they have on them.
 
 ## Doing anything useful with a VCF file
-
-<p> &emsp; In their 2011 paper highlighting the creation of the VCF file format [2], the 1000s Genome Project created their on application that can be used to parse and annotate VCF files called “VCF Tools”.</p>
 
 How to read manually
 
@@ -119,17 +140,20 @@ List one that is good because it is documented and seems to be well tested
 
 # Other available programs
 
-<p> &emsp; This tutorial has examined two programs, IGV and VCFTools to visualize and parse data respectively. However, there are a large number of other programs that have been created to do this as well. I have listed them here as a resource should you wish to view them. They vary from very well documented to not.</p>
+<p> &emsp; This tutorial has examined two programs, IGV and BCFTools to visualize and parse data respectively. However, there are a large number of other programs that have been created to do this as well. I have listed them here as a resource should you wish to view them. </p>
 
 * [sgkit](https://pystatgen.github.io/sgkit/latest/vcf.html) provides a Python API, with parsing performed by [cyvcf2](https://github.com/brentp/cyvcf2)
 * https://alimanfoo.github.io/2017/06/14/read-vcf.html
+* The authors at 1000s Genome Project in the 2011 paper highlighting the creation of the VCF file format created a program, VCF Tools, that has a lot of functionality - including filtering and merging files [2]. 
 
 
 # Conclusion
 
-<p> &emsp; The pipeline from sequencing DNA to determining the variation in the DNA sample compared to a reference involves a lot of steps and a massive amount of data. There exists a standardized way in which bioinformaticians use to process this data. One of the steps is the output, a VCF file containing the variation. Yet, this file still contains a large amount of data that can make it difficult to immediately be meaningful. There are programs and tools that we can use to help parse the information out of these VCF files into a more human readable format, so that we can extract biologically meaningful conclusions, results, etc.</p>
+<p> &emsp; The pipeline from sequencing DNA to determining the variation in the DNA sample compared to a reference involves a lot of steps and a massive amount of data. There exists a standardized way in which bioinformaticians use to process this data. One of the steps is the output, a VCF file containing the variation. Yet, this file still contains a large amount of data that can make it difficult to immediately be meaningful. There are programs and tools that we can use to help parse the information out of these VCF files into a more human readable format, so that we can extract biologically meaningful conclusions, and results, etc.</p>
 
 <p> &emsp; For example, IGV allows us to interactively see the variants in your VCF files. From the example above, we were even able to determine what the possible effect would be from this variant, as well as the exact location on the genome. </p>
+
+
 
 
 # References
@@ -145,3 +169,4 @@ List one that is good because it is documented and seems to be well tested
 6. https://samtools.github.io/hts-specs/VCFv4.3.pdf
 7. https://www.ebi.ac.uk/training/online/courses/human-genetic-variation-introduction/variant-identification-and-analysis/variant-identifiers/
 8. Ruijs MW, Verhoef S, Rookus MA, Pruntel R, van der Hout AH, Hogervorst FB, Kluijt I, Sijmons RH, Aalfs CM, Wagner A, Ausems MG, Hoogerbrugge N, van Asperen CJ, Gomez Garcia EB, Meijers-Heijboer H, Ten Kate LP, Menko FH, van 't Veer LJ. TP53 germline mutation testing in 180 families suspected of Li-Fraumeni syndrome: mutation detection rate and relative frequency of cancers in different familial phenotypes. J Med Genet. 2010 Jun;47(6):421-8. doi: 10.1136/jmg.2009.073429. PMID: 20522432.
+9. Petr Danecek, James K Bonfield, Jennifer Liddle, John Marshall, Valeriu Ohan, Martin O Pollard, Andrew Whitwham, Thomas Keane, Shane A McCarthy, Robert M Davies, Heng Li, Twelve years of SAMtools and BCFtools, GigaScience, Volume 10, Issue 2, February 2021, giab008, https://doi.org/10.1093/gigascience/giab008
